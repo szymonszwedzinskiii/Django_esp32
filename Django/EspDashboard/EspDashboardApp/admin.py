@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import receivedDevice,receivedData
 
-# Register your models here.
+
+
+admin.site.register(receivedData)
+admin.site.register(receivedDevice)
