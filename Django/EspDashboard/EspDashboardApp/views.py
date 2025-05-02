@@ -1,8 +1,14 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
+from matplotlib.pyplot import ylabel
+from io import BytesIO
+
 from .models import receivedData,receivedDevice
+import matplotlib.pyplot as plt
+
+
 
 def ping(request):
     return JsonResponse({"message": "Success"})
@@ -15,8 +21,8 @@ def get_data(request):
         print('POST')
         try:
             data = json.loads(request.body)
-            device_name = data.get('device_name')
-            temperature = data.get('temperature')
+            device_name = data['device_name']
+            temperature = data['temperature']
             if temperature is None or device_name is None:
                 print('Missing data')
                 return JsonResponse({"Error": "Missing data"})
@@ -31,6 +37,28 @@ def get_data(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     else:
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+
+def plot_page(request):
+    return render(request, 'sensor_data.html')
+
+def plot_view(request):
+    data = receivedData.objects.all().order_by('timestamp')
+
+    timestamps = [entry.timestamp for entry in data]
+    temperatures = [entry.temperatures for entry in data]
+
+    fig, ax = plt.subplots()
+    ax.plot(timestamps,temperatures,label="Tempratura", marker =0)
+    ax.set(xlabel='Czas',ylabel='Temperatura', title='Wykres temperatury w czasie')
+    ax.grid(True)
+    ax.legend()
+
+    buf = BytesIO()
+    plt.xticks(rotation=45)  # Obróć etykiety na osi X, jeśli daty są zbyt długie
+    plt.tight_layout()  # Dopasowanie wykresu, aby nie nachodziły na siebie etykiety
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    return HttpResponse(buf.getvalue(), content_type='image/png')
 
 def show_sensor_data(request):
     data = receivedData.objects.all()
