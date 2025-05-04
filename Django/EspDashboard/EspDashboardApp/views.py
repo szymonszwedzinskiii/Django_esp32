@@ -39,13 +39,14 @@ def get_data(request):
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
 def plot_page(request):
-    return render(request, 'sensor_data.html')
+    data = receivedData.objects.all()
+    return render(request, 'sensor_data.html',{'data': data})
 
 def plot_view(request):
     data = receivedData.objects.all().order_by('timestamp')
 
     timestamps = [entry.timestamp for entry in data]
-    temperatures = [entry.temperatures for entry in data]
+    temperatures = [entry.temperature for entry in data]
 
     fig, ax = plt.subplots()
     ax.plot(timestamps,temperatures,label="Tempratura", marker =0)
@@ -54,8 +55,8 @@ def plot_view(request):
     ax.legend()
 
     buf = BytesIO()
-    plt.xticks(rotation=45)  # Obróć etykiety na osi X, jeśli daty są zbyt długie
-    plt.tight_layout()  # Dopasowanie wykresu, aby nie nachodziły na siebie etykiety
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     plt.savefig(buf, format='png')
     buf.seek(0)
     return HttpResponse(buf.getvalue(), content_type='image/png')
