@@ -8,4 +8,7 @@ urlpatterns = [
     path('sensor_data/',views.show_sensor_data),
     path('plot/image/', views.plot_view, name='plot_view'),
     path('plot_page/', views.plot_page, name='plot_page'),
+    path('login/',views.login_page,name='login'),
+    path('logout/',views.logout_view,name='logout'),
+    path('register/',views.registration_page,name='register'),
 ]
