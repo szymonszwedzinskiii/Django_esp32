@@ -16,7 +16,7 @@
 
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'plot_page' %}">Wykres</a>
+            <a class="nav-link" href="{% url 'dashboard' %}">Wykres</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Wyloguj ({{ user.username }})</a>

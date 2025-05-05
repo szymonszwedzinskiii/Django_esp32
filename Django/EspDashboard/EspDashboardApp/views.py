@@ -4,14 +4,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render,redirect
 from django.http import JsonResponse, HttpResponse
 import json
+from django.db.models import Avg,Min,Max
 from django.views.decorators.csrf import csrf_exempt
 from matplotlib.pyplot import ylabel
 from io import BytesIO
-
+from django.db.models.functions import TruncDate
+from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import receivedData,receivedDevice
+from .models import receivedData,receivedDevice, Alert
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 
@@ -26,16 +29,20 @@ def get_data(request):
         print('POST')
         try:
             data = json.loads(request.body)
+            print(data)
             device_name = data['device_name']
             temperature = data['temperature']
+            user= data['user']
+            user = User.objects.get(username=user)
             if temperature is None or device_name is None:
                 print('Missing data')
                 return JsonResponse({"Error": "Missing data"})
-            device, _ = receivedDevice.objects.get_or_create(device_name=device_name)
+            device, _ = receivedDevice.objects.get_or_create(device_name=device_name,owner=user)
 
             receivedData.objects.create(
                 temperature = temperature,
                 device_name= device,
+
             )
             return JsonResponse({'status': 'success'}, status=201)
         except json.JSONDecodeError:
@@ -80,7 +87,7 @@ def login_page(request):
         user = authenticate(request,username=username, password=password)
         if user is not None:
             login(request,user)
-            return redirect('plot_page')
+            return redirect('dashboard')
         else:
             messages.error(request, 'Nieprawidłowe dane logowania')
 
@@ -102,3 +109,53 @@ def registration_page(request):
     else:
         form = UserCreationForm()
     return render(request,'register.html',{'form': form})
+
+def user_dashboard(request):
+    user = request.user
+    user = User.objects.get(username=user)
+    try:
+        devices = receivedDevice.objects.filter(owner=user)
+    except receivedDevice.DoesNotExist:
+        return render(request, 'dashboard.html', {'': ''}) # todo create dashboard for empty data
+
+    data = receivedData.objects.filter(device_name__in=devices)
+
+    if not data.exists():
+        return render(request, 'dashboard.html', {'': ''})
+
+    if not user.is_authenticated:
+        return redirect('login')
+
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    if start_date and end_date:
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+        data = data.annotate(date_only=TruncDate('timestamp'))
+        data = data.filter(date_only__range=[start_date,end_date])
+
+    stats = data.aggregate(
+        avg_temp = Avg("temperature",default=0),
+        max_temp=Max("temperature"),
+        min_temp = Min("temperature")
+
+    )
+    alerts_triggered = []
+    for device in devices:
+        alerts = Alert.objects.filter(device=device)
+        for alert in alerts:
+            if data.filter(device_name=device, temperature__gte=alert.temperature_threshold).exists():
+                alerts_triggered.append(f"Alert dla {device.device_name}: {alert.message}")
+
+    context = {
+        'data':data,
+        "stats":stats,
+        "start_date":start_date,
+        "end_date":end_date,
+        'alerts':alerts_triggered
+
+    }
+    return render(request, 'dashboard.html',context)
+
+
