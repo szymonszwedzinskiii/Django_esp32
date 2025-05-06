@@ -2,29 +2,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Logowanie</title>
+    <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'EspDashboardApp/css/style.css' %}">
+
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<nav class="navbar navbar-expand-lg  navbar-custom">
   <div class="container-fluid">
+    <a class="logo" href="{% url 'startupPage' %}">LOGO</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
 
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'plot_page' %}">Wykres</a>
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Logowanie</a>
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Logowanie</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Rejestracja</a>
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
           </li>
         {% endif %}
 
@@ -38,13 +42,6 @@
 <div class="container mt-2">
   <div class="row">
     <div class="col-md-6">
-        <form method="get">
-          <label>Od:</label>
-          <input type="date" name="start_date" value="{{ start_date }}">
-          <label>Do:</label>
-          <input type="date" name="end_date" value="{{ end_date }}">
-          <button type="submit">Filtruj</button>
-        </form>
         <h3>Statystyki:</h3>
         <ul>
             <li>Średnia temperatura: {{ stats.avg_temp|floatformat:2 }}</li>
@@ -72,6 +69,13 @@
   <h2>Panel użytkownika - Twoje dane</h2>
   <div class="row">
     <div class="col-md-6">
+        <form method="get">
+          <label>Od:</label>
+          <input type="date" name="start_date" value="{{ start_date }}">
+          <label>Do:</label>
+          <input type="date" name="end_date" value="{{ end_date }}">
+          <button type="submit">Filtruj</button>
+        </form>
       <h5>Ostatnie pomiary</h5>
       <table class="table table-striped">
         <thead>

@@ -1,0 +1,46 @@
+
+*{
+font-family:sans-serif;
+}
+a{
+text-decoration:none;
+color: #4F4F4F;
+}
+.navbar-custom{
+background: #A1DDCD;
+background: linear-gradient(0deg,rgba(161, 221, 205, 1) 44%, rgba(152, 210, 192, 1) 70%);
+color: #4F4F4F;
+font-size:1.2em;
+}
+.body-container{
+display:grid;
+grid-template-rows: auto 1fr;
+height:100vh;
+width:100%;
+margin:0;
+
+}
+
+.content-row{
+flex:1;
+background-color:#FBF8EF;
+
+}
+.object-list {
+list-style:none;
+display:flex;
+}
+.object-list-item{
+list-style:none;
+}
+.card-custom{
+background-color: #80CBC4;
+
+}
+.btn-custom{
+background-color:#FBF8EF;
+width:100%;
+}
+.card-text-custom{
+text-align:center;
+}
