@@ -21,6 +21,20 @@ from datetime import datetime
 def ping(request):
     return JsonResponse({"message": "Success"})
 
+def startupPage(request):
+    user = request.user
+    user = User.objects.get(username=user)
+    try:
+        devices = receivedDevice.objects.filter(owner=user)
+    except receivedDevice.DoesNotExist:
+        return render(request, 'startupPage.html', {'': ''})  # todo create dashboard for empty data
+
+    return render(request, "startupPage.html",{'data':devices})
+
+def addDevice(request):
+    data ={}
+    return render(request, 'addDevice.html',{'data':data})
+
 @csrf_exempt
 def get_data(request):
     print('get_data func is working')
@@ -87,7 +101,7 @@ def login_page(request):
         user = authenticate(request,username=username, password=password)
         if user is not None:
             login(request,user)
-            return redirect('dashboard')
+            return redirect('startupPage')
         else:
             messages.error(request, 'Nieprawidłowe dane logowania')
 

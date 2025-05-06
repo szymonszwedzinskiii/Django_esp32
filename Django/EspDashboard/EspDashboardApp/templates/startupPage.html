@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello {{ user.username }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'EspDashboardApp/css/style.css' %}">
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg  navbar-custom">
+  <div class="container-fluid">
+    <a class="logo" href="{% url 'startupPage' %}">LOGO</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Logowanie</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid body-container">
+    <div class="row content-row">
+            <h3> Twoje urządzenia: </h3>
+            <ul class="object-list">
+                {% for device in data %}
+                    <div class="card card-custom" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ device.device_name }}</h5>
+                            <p class="card-text"></p>
+                            <a href="#" class="btn btn-custom">Sprawdź dane</a>
+                        </div>
+                    </div>
+                {% endfor %}
+                    <div class="card card-custom" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Dodaj urządzenie</h5>
+                            <p class="card-text card-text-custom">
+                                <a href="{% url 'addDevice'%}"><img height="50em" src="{% static 'EspDashboardApp/icons/plus.png' %}" alt="dodaj"/></a>
+                            </p>
+                        </div>
+                    </div>
+            </ul>
+
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
