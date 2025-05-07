@@ -31,9 +31,12 @@ def startupPage(request):
 
     return render(request, "startupPage.html",{'data':devices})
 
+@csrf_exempt
 def addDevice(request):
-    data ={}
-    return render(request, 'addDevice.html',{'data':data})
+    if request.method == 'POST':
+        token = request.POST.get('Token')
+    return render(request,'addDevice.html',{})
+
 
 @csrf_exempt
 def get_data(request):
