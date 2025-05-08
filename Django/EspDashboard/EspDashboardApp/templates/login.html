@@ -20,12 +20,12 @@
             <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Log out ({{ user.username }})</a>
           </li>
         {% else %}
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Sign in</a>
           </li>
         {% endif %}
 
@@ -45,14 +45,14 @@
         <form method="POST">
         {% csrf_token %}
             <div class="mb-3">
-                <label for="username" class="form-label">Nazwa użytkownika</label>
+                <label for="username" class="form-label">Username:</label>
                 <input type="text" name="username" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Hasło</label>
+                <label for="password" class="form-label">Password:</label>
                 <input type="password" name="password" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Zaloguj</button>
+            <button type="submit" class="btn btn-primary w-100">Log in</button>
         </form>
     </div>
 

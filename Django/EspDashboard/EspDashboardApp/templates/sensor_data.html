@@ -16,17 +16,17 @@
 
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'dashboard' %}">Wykres</a>
+            <a class="nav-link" href="{% url 'dashboard' %}">Plot</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}">Log out ({{ user.username }})</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Logowanie</a>
+            <a class="nav-link" href="{% url 'login' %}">Log in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Rejestracja</a>
+            <a class="nav-link" href="{% url 'register' %}">Sign in</a>
           </li>
         {% endif %}
 

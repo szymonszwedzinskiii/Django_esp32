@@ -21,14 +21,14 @@
             <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Log out ({{ user.username }})</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Logowanie</a>
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Sign in</a>
           </li>
         {% endif %}
 
@@ -42,9 +42,9 @@
 <div class="container mt-2">
   <div class="row">
     <div class="col-md-6">
-        <h3>Statystyki:</h3>
+        <h3>Stats:</h3>
         <ul>
-            <li>Średnia temperatura: {{ stats.avg_temp|floatformat:2 }}</li>
+            <li>Avg temperature: {{ stats.avg_temp|floatformat:2 }}</li>
             <li>Min: {{ stats.min_temp|default:"-" }}</li>
             <li>Max: {{ stats.max_temp|default:"-" }}</li>
         </ul>
@@ -66,7 +66,7 @@
 </div>
 
 <div class="container">
-  <h2>Panel użytkownika - Twoje dane</h2>
+  <h2>User dashboard - your data</h2>
   <div class="row">
     <div class="col-md-6">
         <form method="get">
@@ -74,15 +74,15 @@
           <input type="date" name="start_date" value="{{ start_date }}">
           <label>Do:</label>
           <input type="date" name="end_date" value="{{ end_date }}">
-          <button type="submit">Filtruj</button>
+          <button type="submit">Filtr</button>
         </form>
-      <h5>Ostatnie pomiary</h5>
+      <h5>Last measurements</h5>
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Czas</th>
-            <th>Temperatura</th>
-            <th>Urządzenie</th>
+            <th>Time</th>
+            <th>Temperature</th>
+            <th>Device</th>
           </tr>
         </thead>
         <tbody>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="col-md-6">
-      <h5>Wykres</h5>
+      <h5>Plot</h5>
       <img src="{% url 'plot_view' %}" alt="Wykres" class="img-fluid">
     </div>
   </div>

@@ -27,7 +27,7 @@ def startupPage(request):
     try:
         devices = receivedDevice.objects.filter(owner=user)
     except receivedDevice.DoesNotExist:
-        return render(request, 'startupPage.html', {'': ''})  # todo create dashboard for empty data
+        return render(request, 'startupPage.html', {'data': ''})  # todo create dashboard for empty data
 
     return render(request, "startupPage.html",{'data':devices})
 
@@ -80,8 +80,8 @@ def plot_view(request):
     temperatures = [entry.temperature for entry in data]
 
     fig, ax = plt.subplots()
-    ax.plot(timestamps,temperatures,label="Tempratura", marker =0)
-    ax.set(xlabel='Czas',ylabel='Temperatura', title='Wykres temperatury w czasie')
+    ax.plot(timestamps,temperatures,label="Temperature", marker =0)
+    ax.set(xlabel='Time',ylabel='Temperature', title='Plot of temperature in time')
     ax.grid(True)
     ax.legend()
 
