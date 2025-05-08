@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Device Name: {{ device.device_name }}</h5>
                     <p class="card-text">Some extra data to be added in the future</p>
-                    <a href="#" class="btn btn-custom">Check data</a>
+                    <a href="{% url 'device_dashboard' device.id %}" class="btn btn-custom">Check data</a>
                 </div>
             </div>
         </div>

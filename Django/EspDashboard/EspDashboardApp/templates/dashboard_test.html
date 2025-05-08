@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'EspDashboardApp/css/style.css' %}">
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg  navbar-custom">
+  <div class="container-fluid">
+    <a class="logo" href="{% url 'startupPage' %}">LOGO</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Log out ({{ user.username }})</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Sign in</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-md-6">
+        <h3>Stats:</h3>
+        <ul>
+            <li>Avg temperature: {{ stats.avg_temp|floatformat:2 }}</li>
+            <li>Min: {{ stats.min_temp|default:"-" }}</li>
+            <li>Max: {{ stats.max_temp|default:"-" }}</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+      <h3> Alerts: </h3>
+      {% if alerts %}
+      <div class="alert alert-warning">
+        <ul>
+            {% for alert in alerts %}
+                <li>{{ alert }}</li>
+            {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+<div class="container">
+  <h2>User dashboard - your data</h2>
+  <div class="row">
+    <div class="col-md-6">
+        <form method="get">
+          <label>Od:</label>
+          <input type="date" name="start_date" value="{{ start_date }}">
+          <label>Do:</label>
+          <input type="date" name="end_date" value="{{ end_date }}">
+          <button type="submit">Filtr</button>
+        </form>
+      <h5>Last measurements</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Temperature</th>
+            <th>Device</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in received_data%}
+            <tr>
+              <td>{{ data.timestamp }}</td>
+              <td>{{ data.temperature }}</td>
+              <td>{{ data.device_name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <h5>Plot</h5>
+<!--      <img src="{% url 'plot_view' %}" alt="Wykres" class="img-fluid">-->
+      <img src="{% url 'device_plot' device.id %}" alt="Wykres" class="img-fluid">
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

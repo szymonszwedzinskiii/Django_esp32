@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 import json
 from django.db.models import Avg,Min,Max
@@ -175,4 +175,27 @@ def user_dashboard(request):
     }
     return render(request, 'dashboard.html',context)
 
+def device_dashboard(request, device_id):
+    device = get_object_or_404(receivedDevice, id=device_id)
+    received_data = receivedData.objects.filter(device_name=device)
+    return render(request, 'dashboard_test.html', {'device': device,
+                                              'received_data':received_data})
 
+def device_plot(request, device_id):
+    device =get_object_or_404(receivedDevice,id=device_id)
+    data = receivedData.objects.filter(device_name=device)
+    timestamps = [entry.timestamp for entry in data]
+    temperatures = [entry.temperature for entry in data]
+
+    fig, ax = plt.subplots()
+    ax.plot(timestamps, temperatures, label="Temperature", marker=0)
+    ax.set(xlabel='Time', ylabel='Temperature', title='Plot of temperature in time')
+    ax.grid(True)
+    ax.legend()
+
+    buf = BytesIO()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    return HttpResponse(buf.getvalue(), content_type='image/png')
