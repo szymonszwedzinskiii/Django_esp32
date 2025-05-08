@@ -20,14 +20,11 @@
             <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Log out ({{ user.username }})</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Logowanie</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Log in</a>
           </li>
         {% endif %}
 
@@ -46,7 +43,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Zarejestruj się</button>
+        <button type="submit" class="btn btn-success">Sign in</button>
     </form>
 </div>
 </body>

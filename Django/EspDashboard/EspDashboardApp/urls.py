@@ -12,6 +12,8 @@ urlpatterns = [
     path('logout/',views.logout_view,name='logout'),
     path('register/',views.registration_page,name='register'),
     path('dashboard/',views.user_dashboard,name='dashboard'),
+    path('dashboard/<int:device_id>/',views.device_dashboard,name='device_dashboard'),
+    path('plot/<int:device_id>/',views.device_plot,name='device_plot'),
     path('startupPage/',views.startupPage,name='startupPage'),
     path('add_device/', views.addDevice, name='addDevice'),
 ]

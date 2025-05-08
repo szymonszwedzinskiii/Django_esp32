@@ -86,20 +86,21 @@
           </tr>
         </thead>
         <tbody>
-          {% for item in data %}
+          {% for data in received_data%}
             <tr>
-              <td>{{ item.timestamp }}</td>
-              <td>{{ item.temperature }}</td>
-              <td>{{ item.device_name }}</td>
+              <td>{{ data.timestamp }}</td>
+              <td>{{ data.temperature }}</td>
+              <td>{{ data.device_name }}</td>
             </tr>
-          {% endfor %}
+        {% endfor %}
         </tbody>
       </table>
     </div>
 
     <div class="col-md-6">
       <h5>Plot</h5>
-      <img src="{% url 'plot_view' %}" alt="Wykres" class="img-fluid">
+<!--      <img src="{% url 'plot_view' %}" alt="Wykres" class="img-fluid">-->
+      <img src="{% url 'device_plot' device.id %}" alt="Wykres" class="img-fluid">
     </div>
   </div>
 </div>

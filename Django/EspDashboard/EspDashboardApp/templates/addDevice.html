@@ -23,14 +23,14 @@
             <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Log out ({{ user.username }})</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Logowanie</a>
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Sign in</a>
           </li>
         {% endif %}
 
@@ -40,14 +40,14 @@
 </nav>
 
 <div class="container mt-4">
-    <h2>Dodaj nowe urządzenie</h2>
+    <h2>Add new device</h2>
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">
             <label for="Token" class="form-label">Token</label>
             <input type="text" class="form-control" id="Token" name="Token" required>
         </div>
-        <button type="submit" class="btn btn-primary">Dodaj</button>
+        <button type="submit" class="btn btn-primary">Add device</button>
     </form>
 
 </div>

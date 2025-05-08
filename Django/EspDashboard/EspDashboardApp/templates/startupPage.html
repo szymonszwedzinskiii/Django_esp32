@@ -20,14 +20,14 @@
             <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'EspDashboardApp/icons/dashboard.png'%}" height="18em">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Wyloguj ({{ user.username }})</a>
+            <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'EspDashboardApp/icons/logout.png'%}" height="18em">Log out ({{ user.username }})</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Logowanie</a>
+            <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'EspDashboardApp/icons/user.png'%}" height="18em">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Rejestracja</a>
+            <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'EspDashboardApp/icons/add.png'%}" height="18em">Sign in</a>
           </li>
         {% endif %}
 
@@ -37,33 +37,34 @@
 </nav>
 
 <div class="container-fluid body-container">
-    <div class="row content-row">
-            <h3> Twoje urządzenia: </h3>
-            <ul class="object-list">
-                {% for device in data %}
-                    <div class="card card-custom" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ device.device_name }}</h5>
-                            <p class="card-text"></p>
-                            <a href="#" class="btn btn-custom">Sprawdź dane</a>
-                        </div>
-                    </div>
-                {% endfor %}
-                    <div class="card card-custom" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Dodaj urządzenie</h5>
-                            <p class="card-text card-text-custom">
-                                <a href="{% url 'addDevice'%}"><img height="50em" src="{% static 'EspDashboardApp/icons/plus.png' %}" alt="dodaj"/></a>
-                            </p>
-                        </div>
-                    </div>
-            </ul>
+    <h3> Twoje urządzenia: </h3>
 
+    <div class="row row-custom-margin">
+        {% for device in data %}
+        <div class="col-md-3 mb-4">
+            <div class="card card-custom">
+                <div class="card-body">
+                    <h5 class="card-title">Device Name: {{ device.device_name }}</h5>
+                    <p class="card-text">Some extra data to be added in the future</p>
+                    <a href="{% url 'device_dashboard' device.id %}" class="btn btn-custom">Check data</a>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+        </div><div class="row">
+        {%endif%}
+        {% endfor %}
+        </div>
+<!--                    <div class="card card-custom" style="width: 18rem;">-->
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title">Dodaj urządzenie</h5>-->
+<!--                            <p class="card-text card-text-custom">-->
+<!--                                <a href="{% url 'addDevice'%}"><img height="50em" src="{% static 'EspDashboardApp/icons/plus.png' %}" alt="dodaj"/></a>-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
     </div>
-
-</div>
-
 
 </body>
 </html>

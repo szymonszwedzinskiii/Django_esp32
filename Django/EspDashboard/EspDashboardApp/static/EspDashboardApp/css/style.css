@@ -1,4 +1,3 @@
-
 *{
 font-family:sans-serif;
 }
@@ -7,44 +6,45 @@ text-decoration:none;
 color: #4F4F4F;
 }
 .navbar-custom{
-background: #A1DDCD;
-background: linear-gradient(0deg,rgba(161, 221, 205, 1) 44%, rgba(152, 210, 192, 1) 70%);
-color: #4F4F4F;
-font-size:1.2em;
+    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, .1);
+    background:rgba(255, 255, 255, 0.95);
+    color: #4F4F4F;
+    font-size:1.2em;
 }
 .body-container{
-display:grid;
-grid-template-rows: auto 1fr;
-height:100vh;
-width:100%;
-margin:0;
-
+    margin-top: 2em;
+}
+.row-custom-margin{
+margin-top:3em;
 }
 
-.content-row{
-flex:1;
-background-color:#FBF8EF;
-
-}
 .object-list {
-list-style:none;
-display:flex;
+    list-style:none;
+    display:flex;
 }
 .object-list-item{
-list-style:none;
+    list-style:none;
 }
 .card-custom{
-background-color: #80CBC4;
+    background-color: rgb(255,255,255);
+    -webkit-box-shadow: 0px 0px 11px -5px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 11px -5px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 11px -5px rgba(66, 68, 90, 1);
+    margin: 1em;
 
 }
 .btn-custom{
-background-color:#FBF8EF;
-width:100%;
+    background-color:#32ff7e;
+    width:100%;
+}
+.btn-custom:hover{
+    background-color:#31f075;
+    width:100%;
 }
 .card-text-custom{
-text-align:center;
+    text-align:center;
 }
 
-.add-device-container{
-
+.row-center{
+    text-align:center;
 }
