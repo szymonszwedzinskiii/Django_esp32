@@ -16,4 +16,5 @@ urlpatterns = [
     path('plot/<int:device_id>/',views.device_plot,name='device_plot'),
     path('startupPage/',views.startupPage,name='startupPage'),
     path('add_device/', views.addDevice, name='addDevice'),
+    path('show_token/', views.show_token, name='showToken'),
 ]
