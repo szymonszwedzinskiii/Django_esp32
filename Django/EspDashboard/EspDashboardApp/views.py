@@ -12,9 +12,10 @@ from django.db.models.functions import TruncDate
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import receivedData,receivedDevice, Alert
+from .models import receivedData,receivedDevice, Alert, UserApiToken
 import matplotlib.pyplot as plt
 from datetime import datetime
+from django.utils.dateparse import parse_datetime
 
 
 
@@ -38,34 +39,34 @@ def addDevice(request):
     return render(request,'addDevice.html',{})
 
 
-@csrf_exempt
-def get_data(request):
-    print('get_data func is working')
-
-    if request.method == "POST":
-        print('POST')
-        try:
-            data = json.loads(request.body)
-            print(data)
-            device_name = data['device_name']
-            temperature = data['temperature']
-            user= data['user']
-            user = User.objects.get(username=user)
-            if temperature is None or device_name is None:
-                print('Missing data')
-                return JsonResponse({"Error": "Missing data"})
-            device, _ = receivedDevice.objects.get_or_create(device_name=device_name,owner=user)
-
-            receivedData.objects.create(
-                temperature = temperature,
-                device_name= device,
-
-            )
-            return JsonResponse({'status': 'success'}, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
-    else:
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+# @csrf_exempt
+# def get_data(request):
+#     print('get_data func is working')
+#
+#     if request.method == "POST":
+#         print('POST')
+#         try:
+#             data = json.loads(request.body)
+#             print(data)
+#             device_name = data['device_name']
+#             temperature = data['temperature']
+#             user= data['user']
+#             user = User.objects.get(username=user)
+#             if temperature is None or device_name is None:
+#                 print('Missing data')
+#                 return JsonResponse({"Error": "Missing data"})
+#             device, _ = receivedDevice.objects.get_or_create(device_name=device_name,owner=user)
+#
+#             receivedData.objects.create(
+#                 temperature = temperature,
+#                 device_name= device,
+#
+#             )
+#             return JsonResponse({'status': 'success'}, status=201)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
 @login_required
 def plot_page(request):
@@ -199,3 +200,47 @@ def device_plot(request, device_id):
     plt.savefig(buf, format='png')
     buf.seek(0)
     return HttpResponse(buf.getvalue(), content_type='image/png')
+
+@login_required
+def show_token(request):
+    token, created = UserApiToken.objects.get_or_create(user=request.user)
+    return render(request, 'show_token.html', {"token":token.token})
+
+@csrf_exempt
+def get_data(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "invalid method"})
+    print("TEST")
+    auth = request.headers.get("Authorization")
+    if not auth or not auth.startswith("Token"):
+        return JsonResponse({"error": "missing or invalid Token"})
+
+    token_value = auth.split(" ")[1]
+    try:
+        api_token = UserApiToken.objects.get(token=token_value)
+        user = api_token.user
+    except UserApiToken.DoesNotExist:
+        return JsonResponse({"error" : "Invalid Token"}, status=403)
+
+    try:
+        data = json.loads(request.body)
+        device_name= data["device_name"]
+        temperature = float(data["temperature"])
+        device, _ = receivedDevice.objects.get_or_create(owner = user, device_name=device_name)
+
+        receivedData.objects.create(device_name=device, temperature=temperature)
+
+        return JsonResponse({"status": "ok"})
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+    user = request.user
+    user = User.objects.get(username=user)
+    try:
+        devices = receivedDevice.objects.filter(owner=user)
+    except receivedDevice.DoesNotExist:
+        return render(request, 'startupPage.html', {'data': ''})  # todo create dashboard for empty data
+
+    return render(request, "startupPage.html",{'data':devices})
+
